@@ -33,7 +33,6 @@ thumbs.db
 *.iml  
 
 # Folders to ignore  
-/studyroom-vue/node_modules
 .hg  
 .svn  
 .CVS  
@@ -41,4 +40,7 @@ thumbs.db
 node_modules/  
 jscoverage_lib/  
 bower_components/  
+dist/
+# 忽略编译输出目录
+target/
 dist/
