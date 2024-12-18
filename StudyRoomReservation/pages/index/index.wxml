@@ -1,0 +1,54 @@
+<view class="container">
+  <view class="room-info">
+    <text class="title">自习室预约</text>
+    <picker mode="date" value="{{currentDate}}" start="{{minDate}}" end="{{maxDate}}" bindchange="handleDateChange">
+      <view class="date-picker">
+        <text class="date">{{currentDate}}</text>
+        <text class="picker-arrow">▼</text>
+      </view>
+    </picker>
+  </view>
+
+  <view class="selection-area">
+    <picker bindchange="handleTimeSelect" range="{{timeSlots}}" range-key="time" value="{{selectedTimeIndex}}">
+      <view class="picker-item">
+        <text>选择时间段：</text>
+        <text>{{timeSlots[selectedTimeIndex].time || '请选择时间段'}}</text>
+      </view>
+    </picker>
+
+    <picker range-key="roomLocation" bindchange="bindFloorChange" value="{{floorIndex}}" range="{{floors}}">
+      <view class="picker-item">
+        <text>选择房间号：</text>
+        <text>{{floors[floorIndex].roomLocation || '请选择房间'}}</text>
+      </view>
+    </picker>
+  </view>
+
+  <view class="seat-container">
+    <view class="seat-grid">
+      <block wx:for="{{seats}}" wx:key="seatId">
+        <view class="seat {{item.isAvailable === 'occupied' ? 'occupied' : ''}} {{item.selected ? 'selected' : ''}}" data-id="{{item.seatId}}" bindtap="handleSeatSelect">
+          {{item.number}}
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="legend">
+    <view class="legend-item">
+      <view class="seat-demo available"></view>
+      <text>可选</text>
+    </view>
+    <view class="legend-item">
+      <view class="seat-demo occupied"></view>
+      <text>已占</text>
+    </view>
+    <view class="legend-item">
+      <view class="seat-demo selected"></view>
+      <text>已选</text>
+    </view>
+  </view>
+
+  <button class="submit-btn" bindtap="handleSubmit">确认预约</button>
+</view>

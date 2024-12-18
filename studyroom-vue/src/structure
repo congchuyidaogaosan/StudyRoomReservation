@@ -1,0 +1,22 @@
+src/
+├── api/
+│   └── index.js
+├── assets/
+│   └── logo.png
+├── components/
+│   ├── common/
+│   └── layout/
+├── router/
+│   └── index.js
+├── store/
+│   └── index.js
+├── views/
+│   ├── login/
+│   ├── dashboard/
+│   ├── room-management/
+│   ├── order-management/
+│   └── user-management/
+├── utils/
+│   └── request.js
+├── App.vue
+└── main.js 

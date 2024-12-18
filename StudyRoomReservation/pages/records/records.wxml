@@ -1,0 +1,39 @@
+<view class="records-page">
+  <!-- 标签栏 -->
+  <view class="tabs">
+    <view 
+      class="tab-item {{currentTab === index ? 'active' : ''}}" 
+      wx:for="{{tabs}}" 
+      wx:key="index"
+      bindtap="changeTab"
+      data-index="{{index}}"
+    >
+      {{item}}
+    </view>
+  </view>
+
+  <!-- 记录列表 -->
+  <view class="records-list">
+    <block wx:if="{{records.length > 0}}">
+      <view class="record-item" wx:for="{{records}}" wx:key="id">
+        <view class="record-info">
+          
+          <view class="room-name">{{item.kehuname}}</view>
+          <view class="room-name">{{item.nick}}</view>
+          <view class="room-name">{{item.roomfloor}}</view>
+          <view class="time">
+            <image class="icon-time" src="/images/time.png"></image>
+            {{item.infotime}} {{item.startTime}}-{{item.endTime}}
+          </view>
+        </view>
+        <view class="status {{item.status === '进行中' ? 'status-ongoing' : 'status-completed'}}">
+          {{item.status}}
+        </view>
+      </view>
+    </block>
+    <view class="empty" wx:else>
+      <image src="/images/empty.png" mode="aspectFit"></image>
+      <text>暂无预约记录</text>
+    </view>
+  </view>
+</view> 

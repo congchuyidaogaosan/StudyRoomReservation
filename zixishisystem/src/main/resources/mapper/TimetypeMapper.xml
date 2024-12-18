@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.system.mapper.TimetypeMapper">
+
+    <resultMap id="BaseResultMap" type="com.it.system.domain.Timetype">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="start" column="start" jdbcType="VARCHAR"/>
+            <result property="end" column="end" jdbcType="VARCHAR"/>
+            <result property="typename" column="typename" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,start,end,
+        typename
+    </sql>
+</mapper>

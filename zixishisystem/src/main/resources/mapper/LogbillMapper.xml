@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.system.mapper.LogbillMapper">
+
+    <resultMap id="BaseResultMap" type="com.it.system.domain.Logbill">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="kehuid" column="kehuid" jdbcType="INTEGER"/>
+            <result property="roomid" column="roomid" jdbcType="INTEGER"/>
+            <result property="nick" column="nick" jdbcType="VARCHAR"/>
+            <result property="roomfloor" column="roomfloor" jdbcType="VARCHAR"/>
+            <result property="state" column="state" jdbcType="VARCHAR"/>
+            <result property="infotime" column="infotime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,kehuid,roomid,
+        nick,roomfloor,state,
+        infotime
+    </sql>
+</mapper>

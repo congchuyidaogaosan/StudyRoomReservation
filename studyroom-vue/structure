@@ -1,0 +1,30 @@
+studyroom-vue/
+├── src/
+│   ├── api/
+│   │   └── index.js
+│   ├── assets/
+│   │   └── logo.png
+│   ├── components/
+│   │   ├── common/
+│   │   └── layout/
+│   │       └── Layout.vue
+│   ├── router/
+│   │   └── index.js
+│   ├── store/
+│   │   └── index.js
+│   ├── views/
+│   │   ├── login/
+│   │   │   └── Login.vue
+│   │   ├── dashboard/
+│   │   ├── room-management/
+│   │   │   └── RoomList.vue
+│   │   ├── order-management/
+│   │   └── user-management/
+│   ├── utils/
+│   │   └── request.js
+│   ├── App.vue
+│   └── main.js
+├── .eslintrc.js
+├── .eslintignore
+├── package.json
+└── vue.config.js 

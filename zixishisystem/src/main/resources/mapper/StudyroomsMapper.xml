@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.system.mapper.StudyroomsMapper">
+
+    <resultMap id="BaseResultMap" type="com.it.system.domain.Studyrooms">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="roomName" column="room_name" jdbcType="VARCHAR"/>
+            <result property="roomLocation" column="room_location" jdbcType="VARCHAR"/>
+            <result property="rootFloor" column="root_floor" jdbcType="VARCHAR"/>
+            <result property="totalSeats" column="total_seats" jdbcType="VARCHAR"/>
+            <result property="rootTime" column="root_time" jdbcType="VARCHAR"/>
+            <result property="states" column="states" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,room_name,room_location,
+        root_floor,total_seats,root_time,
+        states
+    </sql>
+</mapper>

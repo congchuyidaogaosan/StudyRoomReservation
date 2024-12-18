@@ -1,0 +1,41 @@
+<view class="my-page">
+  <!-- 用户信息区域 -->
+  <view class="user-info">
+    <block wx:if="{{!hasUserInfo}}">
+      <view class="unauthorized">
+        <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+          <image class="default-avatar" src="/images/default-avatar.png" mode="aspectFill"></image>
+        </button>
+        <input type="nickname" class="nickname-input" placeholder="请输入昵称" bindinput="onInputNickname"/>
+      </view>
+    </block>
+    <block wx:else>
+      <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+        <image class="avatar" src="{{userInfo.photo}}" mode="aspectFill"></image>
+      </button>
+      <input type="nickname" class="nickname-input" placeholder="请输入昵称" value="{{userInfo.nickname}}" bindinput="onInputNickname"/>
+    </block>
+  </view>
+
+  <!-- 功能列表 -->
+  <view class="function-list">
+    <view class="function-item" bindtap="goToRecords">
+      <view class="item-left">
+        <image class="icon" src="/images/record.png"></image>
+        <text>我的记录</text>
+      </view>
+      <view class="arrow"></view>
+    </view>
+  </view>
+
+  <view class="function-list">
+    <view class="function-item" bindtap="gooutput">
+      <view class="item-left">
+        <image class="icon" src="/images/record.png"></image>
+        <text>退出</text>
+      </view>
+      <view class="arrow"></view>
+    </view>
+  </view>
+
+</view> 
