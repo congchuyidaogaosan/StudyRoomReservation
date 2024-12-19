@@ -18,12 +18,12 @@
       <view class="record-item" wx:for="{{records}}" wx:key="id">
         <view class="record-info">
           
-          <view class="room-name">{{item.kehuname}}</view>
-          <view class="room-name">{{item.nick}}</view>
-          <view class="room-name">{{item.roomfloor}}</view>
+          <!-- <view class="room-name">{{item.kehuname}}</view> -->
+          <view class="room-name">房间号：{{item.nick}}</view>
+          <view class="room-name">时间段：{{item.startTime}}-{{item.endTime}}</view>
           <view class="time">
             <image class="icon-time" src="/images/time.png"></image>
-            {{item.infotime}} {{item.startTime}}-{{item.endTime}}
+            {{item.infotime}} 
           </view>
         </view>
         <view class="status {{item.status === '进行中' ? 'status-ongoing' : 'status-completed'}}">

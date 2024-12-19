@@ -72,6 +72,7 @@ Page({
     this.setData({
       currentDate: e.detail.value
     });
+    console.log(this.data.currentDate);
     this.initSeats();
   },
 
@@ -98,7 +99,7 @@ Page({
     // }
 
     wx.request({
-      url: 'http://localhost:8081/Seats/RellayList?roomId=' + room.id + '&timeId=' + slots.id,
+      url: 'http://localhost:8081/Seats/RellayList?roomId=' + room.id + '&timeId=' + slots.id+'&date='+this.data.currentDate,
       method: 'POST',
       success(res) {
         console.log(res.data.data)
@@ -108,8 +109,6 @@ Page({
       }
     })
 
-
-    // this.setData({ seats });
   },
 
   handleSeatSelect(e) {
@@ -177,6 +176,7 @@ Page({
         title: '请登入',
         icon: 'none'
       })
+      return;
     }
 
     console.log(userInfo.id)
@@ -201,24 +201,46 @@ Page({
       header: {
         'content-type': 'application/json'
       },
-      success(res) {
+      success: (res) => {
         console.log(res.data)
         if (res.data.code === 200) {
-
+          // 先显示Toast
           wx.showToast({
             title: '预约成功',
-            icon: 'success'
-          })
-          wx.switchTab({
+            icon: 'success',
+            duration: 1500
+          });
+          
+          // 清空数据
+          this.setData({
+            selectedSeats: [],
+            selectedTimeIndex: -1,
+            floorIndex: -1,
+            flagseat: -1,
+            flagSeatId: -1,
+            seats: []
+          });
+          
+          // 进行跳转
+          wx.navigateTo({
             url: '/pages/records/records'
-          })
+          });
+          console.log('跳转成功');
+          
         } else {
           console.error('预约失败：')
           wx.showToast({
-            title: res.data.message,
+            title: res.data.data,
             icon: 'none'
           })
         }
+      },
+      fail(error) {
+        console.error('请求失败：', error)
+        wx.showToast({
+          title: '网络错误，请重试',
+          icon: 'none'
+        })
       }
     })
   },

@@ -103,6 +103,8 @@
               type="date"
               placeholder="选择日期"
               @change="loadSeatStatus"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
             />
           </el-form-item>
           <el-form-item label="时间段">
@@ -124,11 +126,11 @@
       </div>
 
       <div class="seat-container">
-        <div v-for="seat in seatList" :key="seat.id" class="seat-item">
+        <div v-for="seat in seatList" :key="seat.seatId" class="seat-item">
           <el-card :body-style="{ padding: '10px' }">
-            <div class="seat-number">座位号：{{ seat.seatNumber }}</div>
-            <div class="seat-status" :class="{ 'highlight': isHighlight(seat) }">
-              状态：{{ seat.status }}
+            <div class="seat-number">座位号：{{ seat.number }}</div>
+            <div class="seat-status" :class="{ 'occupied': seat.isAvailable === 'occupied', 'available': seat.isAvailable === 'available' }">
+              状态：{{ seat.isAvailable === 'occupied' ? '已占用' : '空闲' }}
             </div>
             <div class="seat-actions">
               <el-button type="primary" size="mini" @click="handlePrice(seat)">价格管理</el-button>
@@ -186,7 +188,7 @@
 </template>
 
 <script>
-import { floorList, getFloorList, addFloor, updateFloor, getSeatList } from '@/api'
+import { floorList, getFloorList, addFloor, updateFloor, getSeatList, getSeatRecords } from '@/api'
 
 export default {
   name: 'FloorList',
@@ -237,15 +239,15 @@ export default {
       seatDialogVisible: false,
       priceDialogVisible: false,
       recordDialogVisible: false,
-      selectedDate: new Date(),
-      selectedTime: '',
+      selectedDate: `${new Date().getFullYear()}-${('0' + (new Date().getMonth() + 1)).slice(-2)}-${('0' + new Date().getDate()).slice(-2)}`,
+      selectedTime: '1',
       currentRoom: null,
       seatList: [],
       priceForm: {
         price: 0,
         seatId: null
       },
-      recordDate: new Date(),
+      recordDate: `${new Date().getFullYear()}-${('0' + (new Date().getMonth() + 1)).slice(-2)}-${('0' + new Date().getDate()).slice(-2)}`,
       recordList: [],
       currentSeat: null
     }
@@ -331,19 +333,20 @@ export default {
     },
     handleManageSeats(row) {
       this.currentRoom = row
+      this.selectedTime = '1'
       this.loadSeatStatus()
       this.seatDialogVisible = true
     },
     async loadSeatStatus() {
       if (!this.currentRoom) return
 
-      console.log(111);
+      console.log(this.selectedDate, this.selectedTime);
       
       try {
         const res = await getSeatList({
           roomId: this.currentRoom.id,
           date: this.selectedDate,
-          time: this.selectedTime
+          timeId: this.selectedTime
         })
         this.seatList = res.data
       } catch (error) {
@@ -372,11 +375,12 @@ export default {
       this.loadRecords()
     },
     async loadRecords() {
-      if (!this.recordDate || !this.currentSeat) return
-
+      console.log(this.currentSeat);
+      
       try {
         const res = await getSeatRecords({
-          seatId: this.currentSeat.id,
+          seatId: this.currentSeat.roomId,
+          number: this.currentSeat.number,
           date: this.recordDate
         })
         this.recordList = res.data.sort((a, b) => a.time.localeCompare(b.time))
@@ -452,14 +456,19 @@ export default {
   margin-bottom: 10px;
 }
 
+.seat-status.occupied {
+  color: #F56C6C;  /* 红色 */
+  font-weight: bold;
+}
+
+.seat-status.available {
+  color: #67C23A;  /* 绿色 */
+  font-weight: bold;
+}
+
 .seat-actions {
   display: flex;
   justify-content: space-around;
-}
-
-.highlight {
-  color: #67c23a;
-  font-weight: bold;
 }
 
 .record-filter {

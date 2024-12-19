@@ -50,21 +50,56 @@ public class NewBillController {
 
     @RequestMapping("/save")
     public Result save(@RequestBody Newbill newbill) {
+        try {
+            // 检查该用户在同一时间段是否已有预约
+            QueryWrapper<Newbill> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("kehu_id", newbill.getKehuId())
+                       .eq("time_id", newbill.getTimeId())
+                       .eq("time", newbill.getTime());
+            
+            List<Newbill> existingBills = newbillService.list(queryWrapper);
 
-        if (reallyBill(newbill.getTimeId(), newbill.getRoomId(), newbill.getKehuId(), newbill.getSeatsId(),newbill.getTime())) {
-            return Result.build(null, ResultCodeEnum.BILL_REALLY);
+            if (existingBills.size() > 0) {
+                return Result.fail("您在该时间段已有预约，请选择其他时间段");
+            }
+            
+            // 检查座位是否已被预约
+            QueryWrapper<Newbill> seatWrapper = new QueryWrapper<>();
+            seatWrapper.eq("seats_id", newbill.getSeatsId())
+                      .eq("time_id", newbill.getTimeId())
+                      .eq("time", newbill.getTime());
+                      
+            Newbill existingSeat = newbillService.getOne(seatWrapper);
+            
+            if (existingSeat != null) {
+                return Result.fail("该座位已被预约，请选择其他座位");
+            }
+
+            if (reallyBill(newbill.getTimeId(), newbill.getRoomId(), newbill.getKehuId(), newbill.getSeatsId(),newbill.getTime())) {
+                return Result.build(null, ResultCodeEnum.BILL_REALLY);
+            }
+
+            Timetype byId = timetypeService.getById(newbill.getTimeId());
+
+            newbill.setStar(byId.getStart());
+            newbill.setEnd(byId.getEnd());
+            newbill.setStates("occupied");
+
+            boolean save = newbillService.save(newbill);
+            logbillService.newSave(newbill.getKehuId(),newbill.getRoomId(),newbill.getTimeId(),newbill.getSeatsId());
+            if (save) {
+                // 记录日志
+                logbillService.newSave(newbill.getKehuId(), newbill.getRoomId(), 
+                                     newbill.getTimeId(), newbill.getSeatsId());
+                return Result.ok();
+            } else {
+                return Result.fail("预约失败，请重试");
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.fail("系统错误，请稍后重试");
         }
-
-        Timetype byId = timetypeService.getById(newbill.getTimeId());
-
-        newbill.setStar(byId.getStart());
-        newbill.setEnd(byId.getEnd());
-        newbill.setStates("occupied");
-
-        boolean save = newbillService.save(newbill);
-        logbillService.newSave(newbill.getKehuId(),newbill.getRoomId(),newbill.getTimeId(),newbill.getSeatsId());
-
-        return Result.ok();
     }
 
     @RequestMapping("/del/{id}")

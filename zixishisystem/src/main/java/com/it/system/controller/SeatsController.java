@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
@@ -29,39 +31,43 @@ public class SeatsController {
     private NewbillService newbillService;
 
     @RequestMapping("RellayList")
-    public Result RellayList(@RequestParam("timeId") Integer timeId, @RequestParam("roomId") Integer roomId) {
-
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String s = formatter.format(calendar.getTime()).split(" ")[0];
-
-        List<Newbill> newBillList = newbillService.list(new QueryWrapper<Newbill>()
-                .eq("time_id", timeId).eq("room_id", roomId).eq("time", s));
-
-        List<Seats> seatsList = seatsService.list(new QueryWrapper<Seats>().eq("room_id", roomId));
-
-        HashMap<Integer, Seats> stringSeatsHashMap = new HashMap<>();
-
-        for (Seats seats : seatsList) {
-            stringSeatsHashMap.put(seats.getSeatId(), seats);
-        }
-
-        for (Newbill newbill : newBillList) {
-            if (stringSeatsHashMap.containsKey(newbill.getRoomId())) {
-                Seats seats = stringSeatsHashMap.get(newbill.getSeatsId());
-                seats.setIsAvailable("occupied");
+    public Result RellayList(@RequestParam Integer roomId, 
+                            @RequestParam(required = false) Integer timeId,
+                            @RequestParam(required = false) String date) {
+        try {
+            if (date == null || date.isEmpty()) {
+                LocalDate today = LocalDate.now();
+                date = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             }
+            
+            List<Newbill> newBillList = newbillService.list(new QueryWrapper<Newbill>()
+                    .eq("time_id", timeId)
+                    .eq("room_id", roomId)
+                    .eq("time", date));
+
+            List<Seats> seatsList = seatsService.list(new QueryWrapper<Seats>()
+                    .eq("room_id", roomId));
+
+            HashMap<Integer, Seats> seatsMap = new HashMap<>();
+            for (Seats seat : seatsList) {
+                seatsMap.put(seat.getSeatId(), seat);
+            }
+
+            for (Newbill bill : newBillList) {
+                if (seatsMap.containsKey(bill.getSeatsId())) {
+                    Seats seat = seatsMap.get(bill.getSeatsId());
+                    seat.setIsAvailable("occupied");
+                }
+            }
+
+            List<Seats> resultList = new ArrayList<>(seatsMap.values());
+            
+            return Result.ok(resultList);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.fail("获取座位列表失败");
         }
-
-        List<Seats> list = new ArrayList<>();
-
-        Set<Integer> integers = stringSeatsHashMap.keySet();
-        for (Integer integer : integers) {
-            Seats seats = stringSeatsHashMap.get(integer);
-            list.add(seats);
-        }
-
-        return Result.ok(list);
     }
 
 
