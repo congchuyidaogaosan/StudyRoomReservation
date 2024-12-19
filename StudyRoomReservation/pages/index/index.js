@@ -31,6 +31,23 @@ Page({
       maxDate: this.formatDate(maxDate),
       currentDate: this.formatDate(today)
     });
+
+    // 如果是当天，禁用已过去的时间段
+    if (this.data.currentDate === this.formatDate(new Date())) {
+      const now = new Date();
+      const currentHour = now.getHours();
+      
+      const timeSlots = this.data.timeSlots.map(slot => {
+        const timeStart = parseInt(slot.time.split(':')[0]);
+        return {
+          ...slot,
+          disabled: timeStart <= currentHour
+        };
+      });
+      
+      this.setData({ timeSlots });
+    }
+
     this.initRoom();
     this.initTime();
     this.initSeats();
@@ -65,13 +82,53 @@ Page({
     })
   },
   formatDate(date) {
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   },
 
   handleDateChange(e) {
+    const selectedDate = e.detail.value;
+    const today = this.formatDate(new Date());
+    
+    // 检查是否选择了过去的日期
+    if (selectedDate < today) {
+      wx.showToast({
+        title: '不能选择过去的日期',
+        icon: 'none'
+      });
+      return;
+    }
+    
     this.setData({
-      currentDate: e.detail.value
+      currentDate: selectedDate
     });
+    
+    // 如果选择的是当天，禁用已过去的时间段
+    if (selectedDate === today) {
+      const now = new Date();
+      const currentHour = now.getHours();
+      
+      const timeSlots = this.data.timeSlots.map(slot => {
+        const timeStart = parseInt(slot.time.split(':')[0]);
+        return {
+          ...slot,
+          disabled: timeStart <= currentHour
+        };
+      });
+      
+      this.setData({ timeSlots });
+    } else {
+      // 如果不是当天，启用所有时间段
+      const timeSlots = this.data.timeSlots.map(slot => ({
+        ...slot,
+        disabled: false
+      }));
+      
+      this.setData({ timeSlots });
+    }
+    
     console.log(this.data.currentDate);
     this.initSeats();
   },
@@ -247,14 +304,36 @@ Page({
 
   handleTimeSelect(e) {
     const index = e.detail.value;
+    const selectedTime = this.data.timeSlots[index];
+    
+    // 如果是当天，检查时间段
+    if (this.data.currentDate === this.formatDate(new Date())) {
+      const now = new Date();
+      const currentHour = now.getHours();
+      
+      // 从时间段字符串中提取小时
+      const timeStart = parseInt(selectedTime.time.split(':')[0]);
+      
+      if (timeStart <= currentHour) {
+        wx.showToast({
+          title: '不能选择已过去的时间段',
+          icon: 'none'
+        });
+        return;
+      }
+    }
+    
+    // 更新选中的时间段
     const timeSlots = this.data.timeSlots.map((slot, idx) => ({
       ...slot,
       selected: idx === parseInt(index)
     }));
+    
     this.setData({
       timeSlots,
       selectedTimeIndex: index
     });
+    
     this.initSeats();
   },
 

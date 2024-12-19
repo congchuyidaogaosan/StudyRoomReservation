@@ -2,16 +2,20 @@
   <view class="room-info">
     <text class="title">自习室预约</text>
     <picker mode="date" value="{{currentDate}}" start="{{minDate}}" end="{{maxDate}}" bindchange="handleDateChange">
-      <view class="date-picker">
-        <text class="date">{{currentDate}}</text>
-        <text class="picker-arrow">▼</text>
+      <view class="picker">
+        当前选择: {{currentDate}}
       </view>
     </picker>
   </view>
 
   <view class="selection-area">
-    <picker bindchange="handleTimeSelect" range="{{timeSlots}}" range-key="time" value="{{selectedTimeIndex}}">
-      <view class="picker-item">
+    <picker 
+      bindchange="handleTimeSelect" 
+      range="{{timeSlots}}" 
+      range-key="time" 
+      value="{{selectedTimeIndex}}"
+      disabled="{{timeSlots[selectedTimeIndex].disabled}}">
+      <view class="picker-item {{timeSlots[selectedTimeIndex].disabled ? 'disabled' : ''}}">
         <text>选择时间段：</text>
         <text>{{timeSlots[selectedTimeIndex].time || '请选择时间段'}}</text>
       </view>
