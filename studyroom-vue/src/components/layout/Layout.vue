@@ -20,13 +20,17 @@
             <span>楼层管理</span>
           </el-menu-item>
         </el-submenu>
-        <el-menu-item index="/order">
-          <i class="el-icon-s-order"></i>
-          <span>预约管理</span>
-        </el-menu-item>
         <el-menu-item index="/user">
           <i class="el-icon-user"></i>
           <span>用户管理</span>
+        </el-menu-item>
+        <el-menu-item index="/log">
+          <i class="el-icon-document"></i>
+          <span>日志管理</span>
+        </el-menu-item>
+        <el-menu-item index="/repair">
+          <i class="el-icon-warning"></i>
+          <span>报修管理</span>
         </el-menu-item>
       </el-menu>
     </el-aside>
@@ -55,7 +59,7 @@
 
 <script>
 export default {
-  name: 'Layout',
+  name: 'AppLayout',
   computed: {
     activeMenu() {
       const { path } = this.$route

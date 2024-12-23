@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Layout from '@/components/layout/Layout.vue'
+import AppLayout from '@/components/layout/Layout.vue'
 
 Vue.use(VueRouter)
 
@@ -12,7 +12,7 @@ const routes = [
   },
   {
     path: '/',
-    component: Layout,
+    component: AppLayout,
     redirect: { name: 'DashboardIndex' },
     children: [
       {
@@ -49,10 +49,16 @@ const routes = [
         meta: { title: '用户管理', icon: 'el-icon-user' }
       },
       {
-        path: 'Log',
+        path: 'log',
         name: 'LogManagement',
-        component: () => import('@/views/user-management/UserList.vue'),
-        meta: { title: '日志管理', icon: 'el-icon-user' }
+        component: () => import('@/views/log-management/LogList.vue'),
+        meta: { title: '日志管理', icon: 'el-icon-document' }
+      },
+      {
+        path: 'repair',
+        name: 'RepairManagement',
+        component: () => import('@/views/repair-management/RepairList.vue'),
+        meta: { title: '报修管理', icon: 'el-icon-warning' }
       }
     ]
   }

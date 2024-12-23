@@ -179,4 +179,45 @@ export function getSeatRecords(params) {
     method: 'get',
     params
   })
+}
+
+// 获取日志列表
+export function getLogList(params) {
+  return request({
+    url: '/logbill/list',
+    method: 'get',
+    params
+  })
+}
+
+// 报修管理接口
+export function getRepairList(params) {
+  return request({
+    url: '/repair/list',
+    method: 'get',
+    params
+  })
+}
+
+export function updateRepairStatus(data) {
+  return request({
+    url: '/repair/updateStatus',
+    method: 'put',
+    data
+  })
+}
+
+export function getRepairDetail(id) {
+  return request({
+    url: `/repair/detail/${id}`,
+    method: 'get'
+  })
+}
+
+export function addRepairRecord(data) {
+  return request({
+    url: '/repair/addRecord',
+    method: 'post',
+    data
+  })
 } 
