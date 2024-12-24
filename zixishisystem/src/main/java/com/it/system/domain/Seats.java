@@ -37,6 +37,7 @@ public class Seats implements Serializable {
      */
     private String Ccolumn;
 
+    private Integer price;
     /**
      * 表示座位是否可用，1 表示可用，0 表示已被预约
      */

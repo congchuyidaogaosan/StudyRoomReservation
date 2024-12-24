@@ -25,11 +25,11 @@ public class LogBillController {
     @RequestMapping("list")
     public Result list(@RequestBody Logbill loglogin) {
         QueryWrapper<Logbill> logbillQueryWrapper = new QueryWrapper<>();
-        if (loglogin.getKehuid()!=null && loglogin.getKehuid()!=0){
-            logbillQueryWrapper.eq("kehuid",loglogin.getKehuid());
+        if (loglogin.getKehuid() != null && loglogin.getKehuid() != 0) {
+            logbillQueryWrapper.eq("kehuid", loglogin.getKehuid());
         }
-        if (loglogin.getStatus()!=null && !loglogin.getStatus().equals("")){
-            logbillQueryWrapper.eq("status",loglogin.getStatus());
+        if (loglogin.getStatus() != null && !loglogin.getStatus().equals("")) {
+            logbillQueryWrapper.eq("status", loglogin.getStatus());
         }
 
         logbillQueryWrapper.orderByDesc("infotime");
@@ -41,11 +41,11 @@ public class LogBillController {
     @RequestMapping("RootList")
     public Result RootList(Logbill loglogin) {
         QueryWrapper<Logbill> logbillQueryWrapper = new QueryWrapper<>();
-        if (loglogin.getKehuid()!=null && loglogin.getKehuid()!=0){
-            logbillQueryWrapper.eq("kehuid",loglogin.getKehuid());
+        if (loglogin.getKehuid() != null && loglogin.getKehuid() != 0) {
+            logbillQueryWrapper.eq("kehuid", loglogin.getKehuid());
         }
-        if (loglogin.getStatus()!=null && !loglogin.getStatus().equals("")){
-            logbillQueryWrapper.eq("status",loglogin.getStatus());
+        if (loglogin.getStatus() != null && !loglogin.getStatus().equals("")) {
+            logbillQueryWrapper.eq("status", loglogin.getStatus());
         }
 
         logbillQueryWrapper.orderByDesc("infotime");
@@ -63,14 +63,14 @@ public class LogBillController {
     }
 
     @RequestMapping("/update")
-    public Result update(Logbill logbill) {
+    public Result update(@RequestBody Logbill logbill) {
 
         boolean update = logbillService.updateById(logbill);
         return Result.ok();
     }
 
     @RequestMapping("/save")
-    public Result save(Logbill logbill) {
+    public Result save(@RequestBody Logbill logbill) {
 
         boolean save = logbillService.save(logbill);
         return Result.ok();

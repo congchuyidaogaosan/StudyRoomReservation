@@ -167,7 +167,7 @@ export function listSeat(params) {
 // 座位相关接口
 export function updateSeatPrice(data) {
   return request({
-    url: '/Seats/updatePrice',
+    url: '/Seats/updateSeatPrice',
     method: 'put',
     data
   })
@@ -184,7 +184,7 @@ export function getSeatRecords(params) {
 // 获取日志列表
 export function getLogList(params) {
   return request({
-    url: '/logbill/list',
+    url: '/LogBill/RootList',
     method: 'get',
     params
   })
@@ -193,7 +193,7 @@ export function getLogList(params) {
 // 报修管理接口
 export function getRepairList(params) {
   return request({
-    url: '/repair/list',
+    url: '/Warranty/list',
     method: 'get',
     params
   })
@@ -201,7 +201,7 @@ export function getRepairList(params) {
 
 export function updateRepairStatus(data) {
   return request({
-    url: '/repair/updateStatus',
+    url: '/Warranty/update',
     method: 'put',
     data
   })
@@ -209,15 +209,15 @@ export function updateRepairStatus(data) {
 
 export function getRepairDetail(id) {
   return request({
-    url: `/repair/detail/${id}`,
+    url: `/Warranty/info/${id}`,
     method: 'get'
   })
 }
 
 export function addRepairRecord(data) {
   return request({
-    url: '/repair/addRecord',
+    url: '/Warranty/addRecord',
     method: 'post',
     data
   })
-} 
+}

@@ -7,13 +7,8 @@
           <el-input v-model="queryParams.userName" placeholder="请输入用户名" clearable></el-input>
         </el-form-item>
         <el-form-item label="时间范围">
-          <el-date-picker
-            v-model="queryParams.dateRange"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            value-format="yyyy-MM-dd">
+          <el-date-picker v-model="queryParams.dateRange" type="daterange" range-separator="至" start-placeholder="开始日期"
+            end-placeholder="结束日期" value-format="yyyy-MM-dd">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -25,41 +20,32 @@
 
     <!-- 日志列表 -->
     <el-table v-loading="loading" :data="logList" border>
-      <el-table-column prop="userName" label="用户名"></el-table-column>
-      <el-table-column prop="roomLocation" label="房间号"></el-table-column>
-      <el-table-column prop="seatNumber" label="座位号"></el-table-column>
+      <el-table-column prop="kehuname" label="用户名"></el-table-column>
+      <el-table-column prop="nick" label="房间号"></el-table-column>
+      <el-table-column prop="seatsrow" label="座位号">
+        <template slot-scope="scope">
+          行 {{ scope.row.seatsrow }}列{{ scope.row.seatcolunm }}
+        </template>
+
+      </el-table-column>
       <el-table-column prop="amount" label="消费金额">
         <template slot-scope="scope">
           ¥{{ scope.row.amount }}
         </template>
       </el-table-column>
-      <el-table-column prop="date" label="日期"></el-table-column>
+      <el-table-column prop="infotime" label="日期"></el-table-column>
       <el-table-column prop="timeSlot" label="时间段">
         <template slot-scope="scope">
           {{ scope.row.startTime }}-{{ scope.row.endTime }}
         </template>
       </el-table-column>
       <el-table-column prop="status" label="状态">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status === '1' ? 'success' : 'info'">
-            {{ scope.row.status === '1' ? '已完成' : '未完成' }}
-          </el-tag>
-        </template>
+       
       </el-table-column>
     </el-table>
 
-    <!-- 分页 -->
-    <div class="pagination-container">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="queryParams.pageNum"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="queryParams.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total">
-      </el-pagination>
-    </div>
+
+
   </div>
 </template>
 
@@ -96,7 +82,7 @@ export default {
         }
         const res = await getLogList(params)
         this.logList = res.data
-        this.total = res.total
+        console.log(res)
       } catch (error) {
         console.error('获取日志列表失败:', error)
         this.$message.error('获取日志列表失败')
@@ -142,4 +128,4 @@ export default {
   margin-top: 20px;
   text-align: right;
 }
-</style> 
+</style>
