@@ -24,7 +24,7 @@
       <el-table-column prop="nick" label="房间号"></el-table-column>
       <el-table-column prop="seatsrow" label="座位号">
         <template slot-scope="scope">
-          行 {{ scope.row.seatsrow }}列{{ scope.row.seatcolunm }}
+          {{ scope.row.number }}号座位
         </template>
 
       </el-table-column>

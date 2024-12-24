@@ -148,7 +148,7 @@
         append-to-body>
         <el-form :model="priceForm" label-width="80px">
           <el-form-item label="价格">
-            <el-input-number v-model="priceForm.price" :min="0" :step="0.5"></el-input-number>
+            <el-input-number v-model="priceForm.price" :min="1" :step="1"></el-input-number>
           </el-form-item>
         </el-form>
         <span slot="footer">
