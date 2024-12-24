@@ -188,7 +188,7 @@
 </template>
 
 <script>
-import { floorList, getFloorList, addFloor, updateFloor, getSeatList, getSeatRecords } from '@/api'
+import { floorList, getFloorList, addFloor, updateFloor, getSeatList, getSeatRecords,updateSeatPrice  } from '@/api'
 
 export default {
   name: 'FloorList',
@@ -355,11 +355,16 @@ export default {
     },
     handlePrice(seat) {
       this.currentSeat = seat
-      this.priceForm.seatId = seat.id
+
+        console.log(seat)
+
+      this.priceForm.seatId = seat.seatId
+      this.priceForm.roomId = seat.roomId
       this.priceForm.price = seat.price || 0
       this.priceDialogVisible = true
     },
     async submitPrice() {
+      
       try {
         await updateSeatPrice(this.priceForm)
         this.$message.success('价格更新成功')

@@ -59,6 +59,9 @@ public class Logbill implements Serializable {
     private String startTime;
     private String endTime;
 
+    private Integer amount;
+
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 

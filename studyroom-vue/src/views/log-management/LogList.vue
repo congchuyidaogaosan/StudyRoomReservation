@@ -7,6 +7,7 @@
           <el-input v-model="queryParams.userName" placeholder="请输入用户名" clearable></el-input>
         </el-form-item>
         <el-form-item label="时间范围">
+<<<<<<< HEAD
           <el-date-picker
             v-model="queryParams.dateRange"
             type="daterange"
@@ -14,6 +15,10 @@
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             value-format="yyyy-MM-dd">
+=======
+          <el-date-picker v-model="queryParams.dateRange" type="daterange" range-separator="至" start-placeholder="开始日期"
+            end-placeholder="结束日期" value-format="yyyy-MM-dd">
+>>>>>>> 5d2a7177b67b5b906092d1b1a2599086ac95a0dd
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -25,21 +30,37 @@
 
     <!-- 日志列表 -->
     <el-table v-loading="loading" :data="logList" border>
+<<<<<<< HEAD
       <el-table-column prop="userName" label="用户名"></el-table-column>
       <el-table-column prop="roomLocation" label="房间号"></el-table-column>
       <el-table-column prop="seatNumber" label="座位号"></el-table-column>
+=======
+      <el-table-column prop="kehuname" label="用户名"></el-table-column>
+      <el-table-column prop="nick" label="房间号"></el-table-column>
+      <el-table-column prop="seatsrow" label="座位号">
+        <template slot-scope="scope">
+          行 {{ scope.row.seatsrow }}列{{ scope.row.seatcolunm }}
+        </template>
+
+      </el-table-column>
+>>>>>>> 5d2a7177b67b5b906092d1b1a2599086ac95a0dd
       <el-table-column prop="amount" label="消费金额">
         <template slot-scope="scope">
           ¥{{ scope.row.amount }}
         </template>
       </el-table-column>
+<<<<<<< HEAD
       <el-table-column prop="date" label="日期"></el-table-column>
+=======
+      <el-table-column prop="infotime" label="日期"></el-table-column>
+>>>>>>> 5d2a7177b67b5b906092d1b1a2599086ac95a0dd
       <el-table-column prop="timeSlot" label="时间段">
         <template slot-scope="scope">
           {{ scope.row.startTime }}-{{ scope.row.endTime }}
         </template>
       </el-table-column>
       <el-table-column prop="status" label="状态">
+<<<<<<< HEAD
         <template slot-scope="scope">
           <el-tag :type="scope.row.status === '1' ? 'success' : 'info'">
             {{ scope.row.status === '1' ? '已完成' : '未完成' }}
@@ -60,6 +81,14 @@
         :total="total">
       </el-pagination>
     </div>
+=======
+       
+      </el-table-column>
+    </el-table>
+
+
+
+>>>>>>> 5d2a7177b67b5b906092d1b1a2599086ac95a0dd
   </div>
 </template>
 
@@ -96,7 +125,11 @@ export default {
         }
         const res = await getLogList(params)
         this.logList = res.data
+<<<<<<< HEAD
         this.total = res.total
+=======
+        console.log(res)
+>>>>>>> 5d2a7177b67b5b906092d1b1a2599086ac95a0dd
       } catch (error) {
         console.error('获取日志列表失败:', error)
         this.$message.error('获取日志列表失败')
@@ -142,4 +175,8 @@ export default {
   margin-top: 20px;
   text-align: right;
 }
+<<<<<<< HEAD
 </style> 
+=======
+</style>
+>>>>>>> 5d2a7177b67b5b906092d1b1a2599086ac95a0dd

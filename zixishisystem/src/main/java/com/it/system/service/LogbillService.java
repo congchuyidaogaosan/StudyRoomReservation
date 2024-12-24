@@ -8,5 +8,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface LogbillService extends IService<Logbill> {
 
-    void newSave(Integer kehuId, Integer roomId, Integer timeId, Integer seatsId);
+    void newSave(Integer kehuId, Integer roomId, Integer timeId, Integer seatsId,Integer price);
 }

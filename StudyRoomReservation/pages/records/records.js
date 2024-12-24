@@ -25,7 +25,54 @@ Page({
     // 每次显示页面时刷新记录
     this.getRecords()
   },
+  handleClick(e) {
+    let that = this;
+    const id = e.currentTarget.dataset.index;
+    console.log(id)
 
+    let date = {
+      id: id,
+      status: '进行中',
+    }
+
+    wx.request({
+      url: 'http://localhost:8081/LogBill/update',
+      data: date,
+      method: 'POST',
+      header: {
+        'content-type': 'application/json'
+      },
+      success(res) {
+        if (res.data.code === 200) {
+          that.getRecords();
+        }
+      }
+    })
+
+  },
+  handleNoClick(e) {
+    let that = this;
+    const index = e.currentTarget.dataset;
+    console.log(index.index)
+    let mydate = {
+      id: index.index,
+      status: '手动退订',
+    }
+    wx.request({
+      url: 'http://localhost:8081/LogBill/update',
+      data: mydate,
+      method: 'POST',
+      header: {
+        'content-type': 'application/json'
+      },
+      success(res) {
+        if (res.data.code === 200) {
+          that.getRecords();
+        }
+      }
+    })
+
+  },
   // 切换标签
   changeTab(e) {
     const index = e.currentTarget.dataset.index
@@ -39,11 +86,7 @@ Page({
   // 获取记录列表
   getRecords(tabIndex = 0) {
     let that = this;
-
     // 根据标签筛选
-
-
-
     if (tabIndex === 1) {
       this.data.status = '未开始'
     } else if (tabIndex === 2) {
@@ -54,7 +97,6 @@ Page({
       this.data.status = ''
     }
     let data = { kehuid: this.data.userInfo.id, status: this.data.status };
-
 
     wx.request({
       url: 'http://localhost:8081/LogBill/list',

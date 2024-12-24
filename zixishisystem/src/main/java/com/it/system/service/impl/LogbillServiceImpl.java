@@ -31,7 +31,7 @@ public class LogbillServiceImpl extends ServiceImpl<LogbillMapper, Logbill>
     private KehuService kehuService;
 
     @Override
-    public void newSave(Integer kehuId, Integer roomId, Integer timeId, Integer seatsId) {
+    public void newSave(Integer kehuId, Integer roomId, Integer timeId, Integer seatsId,Integer price) {
         Logbill logbill = new Logbill();
 
         Studyrooms studyrooms = studyroomsService.getById(roomId);
@@ -53,7 +53,9 @@ public class LogbillServiceImpl extends ServiceImpl<LogbillMapper, Logbill>
 
         logbill.setStartTime(timetype.getStart());
         logbill.setEndTime(timetype.getEnd());
-        
+
+        logbill.setAmount(price);
+
         logbillMapper.insert(logbill);
     }
 }

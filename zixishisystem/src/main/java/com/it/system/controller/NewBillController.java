@@ -2,10 +2,7 @@ package com.it.system.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.it.system.domain.*;
-import com.it.system.service.KehuService;
-import com.it.system.service.LogbillService;
-import com.it.system.service.NewbillService;
-import com.it.system.service.TimetypeService;
+import com.it.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +21,9 @@ public class NewBillController {
 
     @Autowired
     private LogbillService logbillService;
+
+    @Autowired
+    private SeatsService seatsService;
 
     @RequestMapping("list")
     public Result list(Newbill newbill) {
@@ -85,12 +85,16 @@ public class NewBillController {
             newbill.setEnd(byId.getEnd());
             newbill.setStates("occupied");
 
+
+            Seats seats = seatsService.getById(newbill.getSeatsId());
+
+
             boolean save = newbillService.save(newbill);
-            logbillService.newSave(newbill.getKehuId(),newbill.getRoomId(),newbill.getTimeId(),newbill.getSeatsId());
+            logbillService.newSave(newbill.getKehuId(),newbill.getRoomId(),newbill.getTimeId(),newbill.getSeatsId(),seats.getPrice());
             if (save) {
                 // 记录日志
                 logbillService.newSave(newbill.getKehuId(), newbill.getRoomId(), 
-                                     newbill.getTimeId(), newbill.getSeatsId());
+                                     newbill.getTimeId(), newbill.getSeatsId(),0);
                 return Result.ok();
             } else {
                 return Result.fail("预约失败，请重试");

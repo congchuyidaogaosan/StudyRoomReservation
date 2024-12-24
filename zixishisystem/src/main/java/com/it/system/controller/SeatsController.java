@@ -30,6 +30,13 @@ public class SeatsController {
     @Autowired
     private NewbillService newbillService;
 
+    @RequestMapping("updateSeatPrice")
+    public Result updatePrice(@RequestBody Seats seats){
+
+        boolean update = seatsService.updateById(seats);
+        return Result.ok();
+    }
+
     @RequestMapping("RellayList")
     public Result RellayList(@RequestParam Integer roomId, 
                             @RequestParam(required = false) Integer timeId,
