@@ -11,4 +11,9 @@ import java.util.List;
 public interface StudyroomsService extends IService<Studyrooms> {
 
     List<String> floorList();
+
+    Integer listCount();
+
+    Integer listStateCount();
+
 }

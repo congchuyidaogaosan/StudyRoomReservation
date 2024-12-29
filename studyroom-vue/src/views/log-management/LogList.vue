@@ -22,11 +22,11 @@
     <el-table v-loading="loading" :data="logList" border>
       <el-table-column prop="kehuname" label="用户名"></el-table-column>
       <el-table-column prop="nick" label="房间号"></el-table-column>
-      <el-table-column prop="seatsrow" label="座位号">
+      <el-table-column label="座位位置">
         <template slot-scope="scope">
-          {{ scope.row.number }}号座位
+          第{{ scope.row.seatsrow
+ }}行 第{{ scope.row.seatcolunm }}列
         </template>
-
       </el-table-column>
       <el-table-column prop="amount" label="消费金额">
         <template slot-scope="scope">
@@ -40,7 +40,6 @@
         </template>
       </el-table-column>
       <el-table-column prop="status" label="状态">
-       
       </el-table-column>
     </el-table>
 

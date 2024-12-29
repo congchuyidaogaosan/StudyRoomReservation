@@ -13,6 +13,13 @@ public interface StudyroomsMapper extends BaseMapper<Studyrooms> {
 
     @Select("SELECT DISTINCT  root_floor FROM studyrooms")
     List<String> floorList();
+
+    @Select("SELECT COUNT(*) FROM `studyrooms`")
+    Integer listCount();
+
+    @Select("SELECT COUNT(*) FROM `studyrooms` WHERE states =0")
+    Integer listStateCount();
+
 }
 
 

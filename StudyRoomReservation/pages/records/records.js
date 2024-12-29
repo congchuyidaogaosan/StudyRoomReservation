@@ -118,5 +118,20 @@ Page({
 
 
 
+  },
+
+  handleRepair(e) {
+    const item = e.currentTarget.dataset.item
+    wx.showModal({
+      title: '报修',
+      content: '确认要报修该座位吗？',
+      success: (res) => {
+        if (res.confirm) {
+          wx.navigateTo({
+            url: `/pages/repair-form/repair-form?roomId=${item.roomId}&seatId=${item.seatsId}&roomName=${item.nick}&seatRow=${item.seatsrow}&seatColumn=${item.seatcolunm}`
+          })
+        }
+      }
+    })
   }
 }) 

@@ -175,8 +175,8 @@ export function updateSeatPrice(data) {
 
 export function getSeatRecords(params) {
   return request({
-    url: '/Seats/records',
-    method: 'get',
+    url: 'NewBill/listLog',
+    method: 'post',
     params
   })
 }
@@ -219,5 +219,35 @@ export function addRepairRecord(data) {
     url: '/Warranty/addRecord',
     method: 'post',
     data
+  })
+}
+
+// 仪表盘统计接口
+export function getUserCount() {
+  return request({
+    url: '/Kehu/listCount',
+    method: 'get'
+  })
+}
+
+export function getRoomCount() {
+  return request({
+    url: '/StudyRooms/listCount',
+    method: 'get'
+  })
+}
+
+export function getTodayOrderCount(params) {
+  return request({
+    url: '/NewBill/NewBillState',
+    method: 'get',
+    params
+  })
+}
+
+export function getOpenRoomCount() {
+  return request({
+    url: '/StudyRooms/listStateCount',
+    method: 'get'
   })
 }

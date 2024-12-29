@@ -60,7 +60,8 @@ public class Newbill implements Serializable {
 
     private Date initTime;
 
- 
+    @TableField(exist = false)
+    private String KehuName;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

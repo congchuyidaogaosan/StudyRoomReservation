@@ -19,6 +19,12 @@ public class KehuController {
     @Autowired
     private KehuService kehuService;
 
+    @GetMapping("listCount")
+    public Result listCount(){
+
+      Integer kehucount=  kehuService.listCount();
+        return Result.ok(kehucount);
+    }
 
     @GetMapping("list")
     public Result list(Kehu kehu) {

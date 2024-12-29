@@ -58,4 +58,11 @@ Page({
       url: '/pages/login/login'
     })
   },
+
+  // 跳转到钱包页面
+  goToWallet() {
+    wx.navigateTo({
+      url: '/pages/wallet/wallet'
+    })
+  }
 }) 

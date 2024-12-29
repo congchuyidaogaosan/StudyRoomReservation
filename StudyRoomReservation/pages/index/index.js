@@ -225,31 +225,58 @@ Page({
   },
 
   handleReservation() {
-    let that = this;
     const userInfo = wx.getStorageSync('userInfo')
-
     if (!userInfo) {
       wx.showToast({
-        title: '请登入',
+        title: '请先登录',
         icon: 'none'
       })
-      return;
+      return
     }
 
-    console.log(userInfo.id)
-    console.log(this.data.currentDate)
-    let slots = this.data.timeSlots[this.data.selectedTimeIndex];
-    let floors = this.data.floors[this.data.floorIndex];
-    console.log(floors)
-    console.log(slots)
+    // 获取座位价格
+    const seat = this.data.seats.find(s => s.seatId === this.data.flagSeatId)
+    const price = seat.price || 0
 
+    // 检查余额
+    if (userInfo.balance < price) {
+      wx.showModal({
+        title: '余额不足',
+        content: '请先充值',
+        confirmText: '去充值',
+        success(res) {
+          if (res.confirm) {
+            wx.navigateTo({
+              url: '/pages/wallet/wallet'
+            })
+          }
+        }
+      })
+      return
+    }
+
+    // 确认预约
+    wx.showModal({
+      title: '确认预约',
+      content: `将扣除¥${price}，是否确认？`,
+      success: (res) => {
+        if (res.confirm) {
+          this.submitReservation(price)
+        }
+      }
+    })
+  },
+
+  // 提交预约
+  submitReservation(price) {
     let data = {
-      timeId: slots.id,
-      roomId: floors.id,
-      kehuId: userInfo.id,
+      timeId: this.data.timeSlots[this.data.selectedTimeIndex].id,
+      roomId: this.data.floors[this.data.floorIndex].id,
+      kehuId: wx.getStorageSync('userInfo').id,
       time: this.data.currentDate,
-      seatsId: this.data.flagSeatId
-    };
+      seatsId: this.data.flagSeatId,
+      price: price
+    }
 
     wx.request({
       url: 'http://localhost:8081/NewBill/save',
@@ -259,45 +286,25 @@ Page({
         'content-type': 'application/json'
       },
       success: (res) => {
-        console.log(res.data)
         if (res.data.code === 200) {
-          // 先显示Toast
+          // 更新本地用户余额
+          let userInfo = wx.getStorageSync('userInfo')
+          userInfo.balance -= price
+          wx.setStorageSync('userInfo', userInfo)
+          
           wx.showToast({
             title: '预约成功',
-            icon: 'success',
-            duration: 1500
-          });
-          
-          // 清空数据
-          this.setData({
-            selectedSeats: [],
-            selectedTimeIndex: -1,
-            floorIndex: -1,
-            flagseat: -1,
-            flagSeatId: -1,
-            seats: []
-          });
-          
-          // 进行跳转
-          wx.navigateTo({
+            icon: 'success'
+          })
+          wx.switchTab({
             url: '/pages/records/records'
-          });
-          console.log('跳转成功');
-          
+          })
         } else {
-          console.error('预约失败：')
           wx.showToast({
-            title: res.data.data,
+            title: res.data.message,
             icon: 'none'
           })
         }
-      },
-      fail(error) {
-        console.error('请求失败：', error)
-        wx.showToast({
-          title: '网络错误，请重试',
-          icon: 'none'
-        })
       }
     })
   },

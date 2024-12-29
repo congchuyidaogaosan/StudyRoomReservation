@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/NewBill")
+    @RequestMapping("/NewBill")
 public class NewBillController {
 
     @Autowired
@@ -25,13 +25,66 @@ public class NewBillController {
     @Autowired
     private SeatsService seatsService;
 
+
+    @Autowired
+    private KehuService kehuService;
+
+    @RequestMapping("NewBillState")
+    public Result NewBillState(@RequestParam("time") String time) {
+        QueryWrapper<Newbill> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("time", time);
+        long count = newbillService.count(queryWrapper);
+        return Result.ok(count);
+    }
+
     @RequestMapping("list")
     public Result list(Newbill newbill) {
+        QueryWrapper<Newbill> queryWrapper = new QueryWrapper<>();
 
-        List<Newbill> list = newbillService.list();
+        if (newbill.getKehuId() != null && newbill.getKehuId() != 0) {
+            queryWrapper.eq("kehu_id", newbill.getKehuId());
+        }
+        if (newbill.getTime() != null && !newbill.getTime().equals("")) {
+            queryWrapper.eq("time", newbill.getTime());
+        }
+        if (newbill.getSeatsId() != null && newbill.getSeatsId() != 0) {
+            queryWrapper.eq("seats_id", newbill.getSeatsId());
+        }
+        if (newbill.getRoomId() != null && newbill.getRoomId() != 0) {
+            queryWrapper.eq("room_id", newbill.getRoomId());
+        }
+
+        List<Newbill> list = newbillService.list(queryWrapper);
         return Result.ok(list);
     }
 
+    @RequestMapping("listLog")
+    public Result listLog(Newbill newbill) {
+        QueryWrapper<Newbill> queryWrapper = new QueryWrapper<>();
+
+        if (newbill.getKehuId() != null && newbill.getKehuId() != 0) {
+            queryWrapper.eq("kehu_id", newbill.getKehuId());
+        }
+        if (newbill.getTime() != null && !newbill.getTime().equals("")) {
+            queryWrapper.eq("time", newbill.getTime());
+        }
+        if (newbill.getSeatsId() != null && newbill.getSeatsId() != 0) {
+            queryWrapper.eq("seats_id", newbill.getSeatsId());
+        }
+        if (newbill.getRoomId() != null && newbill.getRoomId() != 0) {
+            queryWrapper.eq("room_id", newbill.getRoomId());
+        }
+
+        List<Newbill> list = newbillService.list(queryWrapper);
+
+        for (Newbill newbill1 : list) {
+            Kehu byId = kehuService.getById(newbill1.getKehuId());
+            newbill1.setKehuName(byId.getUsername());
+        }
+
+
+        return Result.ok(list);
+    }
 
 
     @RequestMapping("/info/{id}")
@@ -54,28 +107,28 @@ public class NewBillController {
             // 检查该用户在同一时间段是否已有预约
             QueryWrapper<Newbill> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("kehu_id", newbill.getKehuId())
-                       .eq("time_id", newbill.getTimeId())
-                       .eq("time", newbill.getTime());
-            
+                    .eq("time_id", newbill.getTimeId())
+                    .eq("time", newbill.getTime());
+
             List<Newbill> existingBills = newbillService.list(queryWrapper);
 
             if (existingBills.size() > 0) {
                 return Result.fail("您在该时间段已有预约，请选择其他时间段");
             }
-            
+
             // 检查座位是否已被预约
             QueryWrapper<Newbill> seatWrapper = new QueryWrapper<>();
             seatWrapper.eq("seats_id", newbill.getSeatsId())
-                      .eq("time_id", newbill.getTimeId())
-                      .eq("time", newbill.getTime());
-                      
+                    .eq("time_id", newbill.getTimeId())
+                    .eq("time", newbill.getTime());
+
             Newbill existingSeat = newbillService.getOne(seatWrapper);
-            
+
             if (existingSeat != null) {
                 return Result.fail("该座位已被预约，请选择其他座位");
             }
 
-            if (reallyBill(newbill.getTimeId(), newbill.getRoomId(), newbill.getKehuId(), newbill.getSeatsId(),newbill.getTime())) {
+            if (reallyBill(newbill.getTimeId(), newbill.getRoomId(), newbill.getKehuId(), newbill.getSeatsId(), newbill.getTime())) {
                 return Result.build(null, ResultCodeEnum.BILL_REALLY);
             }
 
@@ -90,16 +143,16 @@ public class NewBillController {
 
 
             boolean save = newbillService.save(newbill);
-            logbillService.newSave(newbill.getKehuId(),newbill.getRoomId(),newbill.getTimeId(),newbill.getSeatsId(),seats.getPrice());
+            logbillService.newSave(newbill.getKehuId(), newbill.getRoomId(), newbill.getTimeId(), newbill.getSeatsId(), seats.getPrice());
             if (save) {
                 // 记录日志
-                logbillService.newSave(newbill.getKehuId(), newbill.getRoomId(), 
-                                     newbill.getTimeId(), newbill.getSeatsId(),0);
+                logbillService.newSave(newbill.getKehuId(), newbill.getRoomId(),
+                        newbill.getTimeId(), newbill.getSeatsId(), 0);
                 return Result.ok();
             } else {
                 return Result.fail("预约失败，请重试");
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             return Result.fail("系统错误，请稍后重试");
@@ -114,7 +167,7 @@ public class NewBillController {
     }
 
 
-    private boolean reallyBill(Integer timeId, Integer roomId, Integer kehuId, Integer seatsId,String time) {
+    private boolean reallyBill(Integer timeId, Integer roomId, Integer kehuId, Integer seatsId, String time) {
         QueryWrapper<Newbill> queryWrapper = new QueryWrapper<>();
 
         queryWrapper
@@ -122,7 +175,7 @@ public class NewBillController {
                 .eq("room_id", roomId)
                 .eq("kehu_id", kehuId)
                 .eq("seats_id", seatsId)
-                .eq("init_time",time);
+                .eq("init_time", time);
 
         Newbill one = newbillService.getOne(queryWrapper);
         if (one == null) {

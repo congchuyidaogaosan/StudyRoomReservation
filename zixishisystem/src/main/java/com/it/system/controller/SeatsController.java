@@ -123,6 +123,7 @@ public class SeatsController {
         }
 
 
+
         List<Seats> list = seatsService.list(queryWrapper);
         return Result.ok(list);
     }

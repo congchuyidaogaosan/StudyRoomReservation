@@ -23,13 +23,26 @@ public class StudyRoomsController {
 
     @GetMapping("floorList")
     public Result floorList() {
-
-
         List<String> list = studyroomsService.floorList();
-
         return Result.ok(list);
-
     }
+
+    @GetMapping("listCount")
+    public Result listCount(){
+
+        Integer integer = studyroomsService.listCount();
+
+        return Result.ok(integer);
+    }
+
+    @GetMapping("listStateCount")
+    public Result listStateCount(){
+
+        Integer integer = studyroomsService.listStateCount();
+
+        return Result.ok(integer);
+    }
+
 
     @RequestMapping("list")
     public Result list(Studyrooms studyrooms) {

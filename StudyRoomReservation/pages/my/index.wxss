@@ -67,6 +67,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 30rpx;
+  background: #fff;
   border-bottom: 1rpx solid #eee;
 }
 
@@ -81,9 +82,15 @@
   margin-right: 20rpx;
 }
 
-.function-item text {
-  font-size: 28rpx;
-  color: #333;
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.balance {
+  font-size: 32rpx;
+  color: #ff6b6b;
+  margin-right: 20rpx;
 }
 
 .arrow {

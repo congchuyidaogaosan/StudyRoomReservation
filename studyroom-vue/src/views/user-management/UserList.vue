@@ -129,12 +129,12 @@ export default {
 
         console.log(row)
 
-        updateUser(row)
+        updateUser(row).then(() => {
+          this.$message.success(`${statusText}成功`)
+          this.getList()
+        }).catch(() => { })
+        })
 
-
-        this.$message.success(`${statusText}成功`)
-        this.getList()
-      }).catch(() => { })
     }
   }
 }

@@ -129,8 +129,18 @@
         <div v-for="seat in seatList" :key="seat.seatId" class="seat-item">
           <el-card :body-style="{ padding: '10px' }">
             <div class="seat-number">座位号：{{ seat.number }}</div>
-            <div class="seat-status" :class="{ 'occupied': seat.isAvailable === 'occupied', 'available': seat.isAvailable === 'available' }">
+            <div class="seat-position">
+              第{{ seat.rrow }}行 第{{ seat.ccolumn }}列
+            </div>
+            <div class="seat-status" 
+              :class="{ 
+                'occupied': seat.isAvailable === 'occupied', 
+                'available': seat.isAvailable === 'available' 
+              }">
               状态：{{ seat.isAvailable === 'occupied' ? '已占用' : '空闲' }}
+            </div>
+            <div class="seat-price" v-if="seat.price">
+              价格：¥{{ seat.price }}
             </div>
             <div class="seat-actions">
               <el-button type="primary" size="mini" @click="handlePrice(seat)">价格管理</el-button>
@@ -168,17 +178,19 @@
             v-model="recordDate"
             type="date"
             placeholder="选择日期"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
             @change="loadRecords"
           />
         </div>
-        <el-table :data="recordList" border>
-          <el-table-column prop="time" label="时间"></el-table-column>
-          <el-table-column prop="userName" label="预约人"></el-table-column>
+        <el-table :data="formattedRecordList" border>
+          <el-table-column prop="timeSlot" label="时间段"></el-table-column>
+          <el-table-column prop="kehuName" label="预约人"></el-table-column>
           <el-table-column prop="status" label="状态">
             <template slot-scope="scope">
-              <span :class="{ 'available': scope.row.status === '空闲' }">
+              <el-tag :type="scope.row.status === '已预约' ? 'danger' : 'success'">
                 {{ scope.row.status }}
-              </span>
+              </el-tag>
             </template>
           </el-table-column>
         </el-table>
@@ -249,7 +261,42 @@ export default {
       },
       recordDate: `${new Date().getFullYear()}-${('0' + (new Date().getMonth() + 1)).slice(-2)}-${('0' + new Date().getDate()).slice(-2)}`,
       recordList: [],
-      currentSeat: null
+      currentSeat: null,
+      timeSlotList: [
+        { id: 1, time: '08:00-10:00' },
+        { id: 2, time: '10:00-12:00' },
+        { id: 3, time: '12:00-14:00' },
+        { id: 4, time: '14:00-16:00' },
+        { id: 5, time: '16:00-18:00' },
+        { id: 6, time: '18:00-20:00' },
+        { id: 7, time: '20:00-22:00' },
+        { id: 8, time: '22:00-24:00' }
+      ]
+    }
+  },
+  computed: {
+    formattedRecordList() {
+      // 创建所有时间段的记录
+      const allTimeSlots = this.timeSlotList.map(slot => ({
+        timeSlot: slot.time,
+        timeId: slot.id,
+        kehuName: '-',
+        status: '空闲'
+      }))
+
+      // 用实际预约记录更新对应时间段
+      this.recordList.forEach(record => {
+        const index = allTimeSlots.findIndex(slot => slot.timeId === record.timeId)
+        if (index !== -1) {
+          allTimeSlots[index] = {
+            timeSlot: this.timeSlotList[record.timeId - 1].time,
+            kehuName: record.kehuName || '-',
+            status: '已预约'
+          }
+        }
+      })
+
+      return allTimeSlots
     }
   },
   created() {
@@ -380,17 +427,16 @@ export default {
       this.loadRecords()
     },
     async loadRecords() {
-      console.log(this.currentSeat);
-      
       try {
         const res = await getSeatRecords({
-          seatId: this.currentSeat.roomId,
+          seatId: this.currentSeat.seatId,
           number: this.currentSeat.number,
-          date: this.recordDate
+          time: this.recordDate
         })
-        this.recordList = res.data.sort((a, b) => a.time.localeCompare(b.time))
+        this.recordList = res.data
       } catch (error) {
         console.error('获取预约记录失败:', error)
+        this.$message.error('获取预约记录失败')
       }
     },
     isHighlight(seat) {
@@ -450,10 +496,26 @@ export default {
 
 .seat-item {
   text-align: center;
+  transition: all 0.3s;
+}
+
+.seat-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+}
+
+.el-card {
+  height: 100%;
 }
 
 .seat-number {
   font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.seat-position {
+  font-size: 14px;
+  color: #606266;
   margin-bottom: 10px;
 }
 
@@ -468,6 +530,13 @@ export default {
 
 .seat-status.available {
   color: #67C23A;  /* 绿色 */
+  font-weight: bold;
+}
+
+.seat-price {
+  font-size: 14px;
+  color: #E6A23C;
+  margin-bottom: 10px;
   font-weight: bold;
 }
 

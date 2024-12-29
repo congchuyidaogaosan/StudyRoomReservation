@@ -13,17 +13,27 @@
         <view class="record-info">
           <!-- <view class="room-name">{{item.kehuname}}</view> -->
           <view class="room-name">房间号：{{item.nick}}</view>
+          <view class="room-name">座位：（第{{item.seatsrow}}行 第{{item.seatcolunm}}列）</view>
           <view class="room-name">时间段：{{item.startTime}}-{{item.endTime}}</view>
           <view class="time">
             <image class="icon-time" src="/images/time.png"></image>
             {{item.infotime}}
           </view>
-          <view wx:if="{{item.status=='未开始'}}">
-            <button  bindtap="handleClick" data-index="{{item.id}}">进行开始</button>
+          <view class="action-buttons" wx:if="{{item.status=='未开始'}}">
+            <button class="action-btn start-btn" bindtap="handleClick" data-index="{{item.id}}">
+              <!-- <image class="btn-icon" src="/images/start.png"></image> -->
+              开始使用
+            </button>
+            <button class="action-btn cancel-btn" bindtap="handleNoClick" data-index="{{item.id}}">
+              <!-- <image class="btn-icon" src="/images/cancel.png"></image> -->
+              取消预约
+            </button>
+            <button class="action-btn repair-btn" bindtap="handleRepair" data-item="{{item}}">
+            报修
+          </button>
           </view>
-          <view  wx:if="{{item.status=='未开始'}}" >
-            <button  bindtap="handleNoClick" data-index="{{item.id}}">退订</button>
-          </view>
+          <!-- 添加报修按钮 -->
+          
         </view>
         <view class="status {{item.status === '进行中' ? 'status-ongoing' : 'status-completed'}}">
           {{item.status}}

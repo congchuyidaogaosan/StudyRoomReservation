@@ -23,6 +23,16 @@ public class StudyroomsServiceImpl extends ServiceImpl<StudyroomsMapper, Studyro
     public List<String> floorList() {
         return studyroomsMapper.floorList();
     }
+
+    @Override
+    public Integer listCount() {
+        return studyroomsMapper.listCount();
+    }
+
+    public Integer listStateCount(){
+        return studyroomsMapper.listStateCount();
+    }
+
 }
 
 
