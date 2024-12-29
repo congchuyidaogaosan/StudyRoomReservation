@@ -1,0 +1,40 @@
+<view class="wallet-container">
+  <view class="balance-card">
+    <view class="label">当前余额</view>
+    <view class="amount">¥{{userInfo.balance || '0.00'}}</view>
+    <button class="recharge-btn" bindtap="showRechargeDialog">充值</button>
+  </view>
+  
+  <!-- 交易记录 -->
+  <view class="transactions">
+    <view class="title">交易记录</view>
+    <view class="transaction-item" wx:for="{{transactions}}" wx:key="id">
+      <view class="left">
+        <view class="type">{{item.type}}</view>
+        <view class="time">{{item.createTime}}</view>
+      </view>
+      <view class="right">
+        <text class="{{item.type === '充值' ? 'income' : 'expense'}}">
+          {{item.type === '充值' ? '+' : '-'}}¥{{item.amount}}
+        </text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 充值弹窗 -->
+<view class="recharge-dialog" wx:if="{{showRecharge}}">
+  <view class="dialog-content">
+    <view class="title">充值金额</view>
+    <input type="digit" class="amount-input" value="{{rechargeAmount}}" bindinput="handleAmountInput"/>
+    <view class="quick-amounts">
+      <view class="amount-item {{rechargeAmount === '50' ? 'selected' : ''}}" data-amount="50" bindtap="selectAmount">¥50</view>
+      <view class="amount-item {{rechargeAmount === '100' ? 'selected' : ''}}" data-amount="100" bindtap="selectAmount">¥100</view>
+      <view class="amount-item {{rechargeAmount === '200' ? 'selected' : ''}}" data-amount="200" bindtap="selectAmount">¥200</view>
+    </view>
+    <view class="dialog-buttons">
+      <button class="cancel-btn" bindtap="hideRechargeDialog">取消</button>
+      <button class="confirm-btn" bindtap="handleRecharge">确认充值</button>
+    </view>
+  </view>
+</view> 
