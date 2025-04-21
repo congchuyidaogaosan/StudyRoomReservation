@@ -1,7 +1,7 @@
 <view class="wallet-container">
   <view class="balance-card">
     <view class="label">当前余额</view>
-    <view class="amount">¥{{userInfo.balance || '0.00'}}</view>
+    <view class="amount">¥{{userInfo.    price || '0.00'}}</view>
     <button class="recharge-btn" bindtap="showRechargeDialog">充值</button>
   </view>
   
@@ -10,12 +10,16 @@
     <view class="title">交易记录</view>
     <view class="transaction-item" wx:for="{{transactions}}" wx:key="id">
       <view class="left">
-        <view class="type">{{item.type}}</view>
-        <view class="time">{{item.createTime}}</view>
+        <view class="type">
+          <text class="{{item.node === '+' ? 'income' : 'expense'}}">
+            {{item.node === '+' ? '充值' : '消费'}}
+          </text>
+        </view>
+        <view class="time">{{item.thistime}}</view>
       </view>
       <view class="right">
-        <text class="{{item.type === '充值' ? 'income' : 'expense'}}">
-          {{item.type === '充值' ? '+' : '-'}}¥{{item.amount}}
+        <text class="{{item.node === '+' ? 'income' : 'expense'}}">
+          {{item.node === '+' ? '+' : '-'}}¥{{item.price}}
         </text>
       </view>
     </view>

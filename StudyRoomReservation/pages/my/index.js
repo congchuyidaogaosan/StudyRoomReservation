@@ -6,10 +6,39 @@ Page({
     },
     hasUserInfo: false
   },
-
+  
+  onShow() {
+    // 获取本地存储的用户ID
+    const userInfo = wx.getStorageSync('userInfo')
+    if (userInfo && userInfo.id) {
+      // 从服务器获取最新的用户信息
+      wx.request({
+        url: `http://localhost:8083/Kehu/info/${userInfo.id}`,
+        method: 'GET',
+        success: (res) => {
+          if (res.data.code === 200 && res.data.data) {
+            // 更新本地存储和页面数据
+            wx.setStorageSync('userInfo', res.data.data)
+            this.setData({
+              userInfo: res.data.data,
+              hasUserInfo: true
+            })
+          }
+        },
+        fail: () => {
+          // 如果请求失败，使用本地缓存的数据
+          this.setData({
+            userInfo: userInfo,
+            hasUserInfo: true
+          })
+        }
+      })
+    }
+  },
   onLoad() {
     // 检查是否已有用户信息
     const userInfo = wx.getStorageSync('userInfo')
+    console.log(userInfo);
     if (userInfo) {
       this.setData({
         userInfo: userInfo,

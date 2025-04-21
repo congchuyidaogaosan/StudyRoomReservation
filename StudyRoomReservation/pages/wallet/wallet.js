@@ -72,11 +72,8 @@ Page({
   // 获取交易记录
   getTransactions() {
     wx.request({
-      url: 'http://localhost:8083/wallet/logs',
+      url: `http://localhost:8083/wallet/list/${this.data.userInfo.id}`,
       method: 'GET',
-      data: {
-        userId: this.data.userInfo.id
-      },
       success: (res) => {
         if (res.data.code === 200) {
           console.log(res.data);
@@ -128,10 +125,34 @@ Page({
       return
     }
 
+    wx.request({
+      url: `http://localhost:8083/wallet/Addition`,
+      method: 'Post',
+      data:{
+        uid: this.data.userInfo.id,
+        price: this.data.rechargeAmount,
+        node: '+'
+      },
+      success: (res) => {
+        if (res.data.code === 200) {
+          console.log(res.data);
+          this.getTransactions()
+          wx.request({
+            url: `http://localhost:8083/Kehu/info/${this.data.userInfo.id}`,
+            method: 'GET',
+            success: (res) => {
+              if (res.data.code === 200) {
+                wx.setStorageSync('userInfo', res.data.data)
+              }
+            }
+          })
+        }
+      }
+    })
+
     // 直接更新本地用户信息
     let userInfo = this.data.userInfo
-    userInfo.balance = (parseFloat(userInfo.balance || 0) + parseFloat(this.data.rechargeAmount)).toFixed(2)
-    wx.setStorageSync('userInfo', userInfo)
+    userInfo.price = (parseFloat(userInfo.price || 0) + parseFloat(this.data.rechargeAmount)).toFixed(2)
     
     this.setData({
       userInfo,
