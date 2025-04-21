@@ -25,7 +25,7 @@ import org.springframework.web.client.RestTemplate;
 public class LoginWXController {
 
     private final String AppId = "wx958c331bb5b02d97";
-    private final String AppSecret = "e69f8c1f7d8deb8892f2f2f964100178";
+    private final String AppSecret = "c7d7d587e080c1dda3b07c7a6ff47f96";
 
 
     @Autowired
@@ -55,15 +55,15 @@ public class LoginWXController {
             JSONObject jsonObject = JSON.parseObject(response.getBody());
             String session_key = (String) jsonObject.get("session_key");
             String openid = (String) jsonObject.get("openid");
-            Kehu kehuEntity = AddOrUpdate(Integer.valueOf(openid), session_key);
+            Kehu kehuEntity = AddOrUpdate(openid, session_key);
             return Result.ok(kehuEntity);
         } catch (Exception e) {
-            return Result.fail();
+            return Result.fail(e);
         }
     }
 
 
-    private Kehu AddOrUpdate(Integer openID, String sessionKey) {
+    private Kehu AddOrUpdate(String openID, String sessionKey) {
         Kehu kehu = new Kehu();
         kehu.setOpenid(openID);
         kehu.setSessionkey(sessionKey);

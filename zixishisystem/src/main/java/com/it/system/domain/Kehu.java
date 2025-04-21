@@ -39,7 +39,7 @@ public class Kehu implements Serializable {
     /**
      * 
      */
-    private Integer openid;
+    private String openid;
 
     /**
      * 

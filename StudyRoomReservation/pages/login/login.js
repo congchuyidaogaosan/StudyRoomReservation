@@ -139,12 +139,9 @@ Page({
               })
               // 发送 code 到后台换取 token
               wx.request({
-                url: 'http://localhost:8083/Login/wechatLogin',
-                method: 'POST',
-                data: {
-                  code: loginRes.code,
-                  userInfo: userInfo
-                },
+                url: 'http://localhost:8083/WXLogin/setCode?code='+loginRes.code,
+                method: 'get',
+                
                 success: (response) => {
                   wx.hideLoading()
                   if (response.data.code === 200) {
