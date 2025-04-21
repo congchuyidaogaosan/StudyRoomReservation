@@ -79,6 +79,7 @@ Page({
       },
       success: (res) => {
         if (res.data.code === 200) {
+          console.log(res.data);
           this.setData({
             transactions: res.data.data
           })

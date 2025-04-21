@@ -55,14 +55,15 @@ public class KehuController {
     public Result update(@RequestBody Kehu kehu) {
 
         boolean b = kehuService.updateById(kehu);
-        return Result.ok();
+
+        return Result.ok(kehu);
     }
 
     @RequestMapping("/save")
     public Result save(@RequestBody Kehu kehu) {
 
         boolean save = kehuService.save(kehu);
-        return Result.ok();
+        return Result.ok(save);
     }
 
     @RequestMapping("/del/{id}")

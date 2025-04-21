@@ -21,7 +21,7 @@ public class Logbill implements Serializable {
      */
     @TableId(type = IdType.AUTO)
     private Integer id;
-
+    private String  time;
     /**
      *
      */

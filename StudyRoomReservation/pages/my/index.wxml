@@ -13,7 +13,7 @@
       <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
         <image class="avatar" src="{{userInfo.photo}}" mode="aspectFill"></image>
       </button>
-      <input type="nickname" class="nickname-input" placeholder="请输入昵称" value="{{userInfo.nickname}}" bindinput="onInputNickname"/>
+      <input type="nickname" class="nickname-input" placeholder="请输入昵称" value="{{userInfo.username}}" bindinput="onInputNickname"/>
     </block>
   </view>
 
@@ -45,7 +45,7 @@
         <text>我的钱包</text>
       </view>
       <view class="right">
-        <text class="balance">¥{{userInfo.balance || '0.00'}}</text>
+        <text class="balance">¥{{userInfo.price  || '0.00'}}</text>
         <view class="arrow"></view>
       </view>
     </view>

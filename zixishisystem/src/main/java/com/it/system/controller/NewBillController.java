@@ -143,11 +143,11 @@ public class NewBillController {
 
 
             boolean save = newbillService.save(newbill);
-            logbillService.newSave(newbill.getKehuId(), newbill.getRoomId(), newbill.getTimeId(), newbill.getSeatsId(), seats.getPrice());
+//            logbillService.newSave(newbill.getKehuId(), newbill.getRoomId(), newbill.getTimeId(), newbill.getSeatsId(), seats.getPrice());
             if (save) {
                 // 记录日志
                 logbillService.newSave(newbill.getKehuId(), newbill.getRoomId(),
-                        newbill.getTimeId(), newbill.getSeatsId(), 0);
+                        newbill.getTimeId(), newbill.getSeatsId(), seats.getPrice(), newbill.getTime());
                 return Result.ok();
             } else {
                 return Result.fail("预约失败，请重试");

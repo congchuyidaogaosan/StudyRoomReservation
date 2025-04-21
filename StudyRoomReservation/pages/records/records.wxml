@@ -17,7 +17,7 @@
           <view class="room-name">时间段：{{item.startTime}}-{{item.endTime}}</view>
           <view class="time">
             <image class="icon-time" src="/images/time.png"></image>
-            {{item.infotime}}
+            {{item.time}}
           </view>
           <view class="action-buttons" wx:if="{{item.status=='未开始'}}">
             <button class="action-btn start-btn" bindtap="handleClick" data-index="{{item.id}}">

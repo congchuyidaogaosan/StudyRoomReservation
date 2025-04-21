@@ -23,12 +23,19 @@ Page({
     const { avatarUrl } = e.detail;
     const userInfo = this.data.userInfo;
     userInfo.avatarUrl = avatarUrl;
-    
+    userInfo.photo = avatarUrl;
     this.setData({
       hasUserInfo: true,
       userInfo: userInfo
     });
-    wx.setStorageSync('userInfo', userInfo);
+    wx.request({
+      url: 'http://localhost:8083/Kehu/update',
+      method: 'POST',
+      data: userInfo,
+      success: (res) => {
+        wx.setStorageSync('userInfo', res.data.data)
+      }
+    })
   },
 
   // 处理昵称输入
@@ -36,13 +43,20 @@ Page({
     const nickName = e.detail.value;
     const userInfo = this.data.userInfo;
     userInfo.nickName = nickName;
+    userInfo.username = nickName;
     
     this.setData({
       userInfo: userInfo,
       hasUserInfo: true
     });
-    
-    wx.setStorageSync('userInfo', userInfo);
+    wx.request({
+      url: 'http://localhost:8083/Kehu/update',
+      method: 'POST',
+      data: userInfo,
+      success: (res) => {
+        wx.setStorageSync('userInfo', res.data.data)
+      }
+    })
   },
 
   // 跳转到记录页面

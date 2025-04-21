@@ -58,8 +58,6 @@ Page({
       url: 'http://localhost:8083/StudyRooms/list',
       method: 'POST',
       success(res) {
-        console.log(res.data.data)
-
         that.setData({
           floors: res.data.data
         })
@@ -73,8 +71,6 @@ Page({
       url: 'http://localhost:8083/TimeType/list',
       method: 'POST',
       success(res) {
-        console.log(res.data.data)
-
         that.setData({
           timeSlots: res.data.data
         })
@@ -128,8 +124,6 @@ Page({
       
       this.setData({ timeSlots });
     }
-    
-    console.log(this.data.currentDate);
     this.initSeats();
   },
 
@@ -137,12 +131,8 @@ Page({
 
   initSeats() {
     let that = this;
-    console.log(this.data.floors)
-    console.log(this.data.floorIndex)
     let slots = this.data.timeSlots[this.data.selectedTimeIndex];
     let room = this.data.floors[this.data.floorIndex];
-    console.log(room)
-    console.log(slots)
     const seatCount = room.totalSeats;
     const seats = [];
 
@@ -159,7 +149,6 @@ Page({
       url: 'http://localhost:8083/Seats/RellayList?roomId=' + room.id + '&timeId=' + slots.id+'&date='+this.data.currentDate,
       method: 'POST',
       success(res) {
-        console.log(res.data.data)
         that.setData({
           seats: res.data.data
         })
@@ -170,7 +159,6 @@ Page({
 
   handleSeatSelect(e) {
     const seatId = e.currentTarget.dataset.id;
-    console.log(seatId)
 
     let num = 0;
     for (let a = 0; a < this.data.seats.length; a++) {
@@ -183,7 +171,6 @@ Page({
 
     const seats = this.data.seats.map(seat => {
       if (seat.seatId === seatId) {
-        console.log(seat)
         if (num > 0 && (!seat.selected)) {
           wx.showToast({
             title: '只能预约一个座位',
@@ -289,17 +276,27 @@ Page({
         if (res.data.code === 200) {
           // 更新本地用户余额
           let userInfo = wx.getStorageSync('userInfo')
-          userInfo.balance -= price
+          console.log(userInfo);
+          userInfo.price -= price
           wx.setStorageSync('userInfo', userInfo)
-          
+          console.log(wx.getStorageSync('userInfo'));
           wx.showToast({
             title: '预约成功',
             icon: 'success'
           })
-          wx.switchTab({
+          wx.navigateTo({
             url: '/pages/records/records'
           })
-        } else {
+          // 更新数据库用户
+          wx.request({
+            url: 'http://localhost:8083/Kehu/update',
+            method: 'POST',
+            data: userInfo,
+            success: (res) => {
+              wx.setStorageSync('userInfo', res.data.data)
+            }
+          })
+          } else {
           wx.showToast({
             title: res.data.message,
             icon: 'none'

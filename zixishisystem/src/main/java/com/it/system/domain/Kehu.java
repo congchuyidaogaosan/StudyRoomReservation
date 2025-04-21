@@ -36,8 +36,9 @@ public class Kehu implements Serializable {
      */
     private String nickname;
 
+    private String price;
     /**
-     * 
+     *
      */
     private String openid;
 

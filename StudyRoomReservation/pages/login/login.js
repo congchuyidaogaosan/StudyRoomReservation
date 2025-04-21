@@ -42,89 +42,89 @@ Page({
     }, 500)
   },
 
-  handleLogin() {
+  // handleLogin() {
 
-    let that = this;
+  //   let that = this;
 
-    // 表单验证
-    if (!this.data.studentId.trim()) {
-      wx.showToast({
-        title: '请输入学号',
-        icon: 'none'
-      })
-      return
-    }
+  //   // 表单验证
+  //   if (!this.data.studentId.trim()) {
+  //     wx.showToast({
+  //       title: '请输入学号',
+  //       icon: 'none'
+  //     })
+  //     return
+  //   }
 
-    if (!this.data.password.trim()) {
-      wx.showToast({
-        title: '请输入密码',
-        icon: 'none'
-      })
-      return
-    }
+  //   if (!this.data.password.trim()) {
+  //     wx.showToast({
+  //       title: '请输入密码',
+  //       icon: 'none'
+  //     })
+  //     return
+  //   }
 
-    if (!this.data.captcha.trim()) {
-      wx.showToast({
-        title: '请输入验证码',
-        icon: 'none'
-      })
-      return
-    }
+  //   if (!this.data.captcha.trim()) {
+  //     wx.showToast({
+  //       title: '请输入验证码',
+  //       icon: 'none'
+  //     })
+  //     return
+  //   }
 
-    // 防止重复提交
-    if (this.data.isSubmitting) return
+  //   // 防止重复提交
+  //   if (this.data.isSubmitting) return
 
-    this.setData({ isSubmitting: true })
+  //   this.setData({ isSubmitting: true })
 
-    // 这里添加登录逻辑
-    wx.showLoading({
-      title: '登录中...'
-    })
+  //   // 这里添加登录逻辑
+  //   wx.showLoading({
+  //     title: '登录中...'
+  //   })
 
-    if (this.data.captcha !== '1234') {
-      wx.showToast({
-        title: '验证码错误',
-        icon: 'none'
-      })
-      this.refreshCaptcha()
-      return
-    }
+  //   if (this.data.captcha !== '1234') {
+  //     wx.showToast({
+  //       title: '验证码错误',
+  //       icon: 'none'
+  //     })
+  //     this.refreshCaptcha()
+  //     return
+  //   }
 
 
 
-    let data = { password: this.data.password, username: this.data.studentId };
-    console.log(data)
-    wx.request({
-      url: 'http://localhost:8083/Login/login',
-      data: data,
-      method: 'POST',
-      header: {
-        'content-type': 'application/json'
-      },
-      success(res) {
+  //   let data = { password: this.data.password, username: this.data.studentId };
+  //   console.log(data)
+  //   wx.request({
+  //     url: 'http://localhost:8083/Login/login',
+  //     data: data,
+  //     method: 'POST',
+  //     header: {
+  //       'content-type': 'application/json'
+  //     },
+  //     success(res) {
       
-        wx.hideLoading()
-        if (res.data.code === 200) {
-          that.setData({ isSubmitting: false })
-          wx.setStorageSync('isLoggedIn', true)
-          wx.setStorageSync('userInfo', res.data.data)
-          wx.switchTab({
-            url: '/pages/index/index'
-          })
-        } else {
-          wx.showToast({
-            title: res.data.message,
-            icon: 'none'
-          })
-          return;
-        }
+  //       wx.hideLoading()
+  //       if (res.data.code === 200) {
+  //         that.setData({ isSubmitting: false })
+  //         wx.setStorageSync('isLoggedIn', true)
+  //         wx.setStorageSync('userInfo', res.data.data)
+  //         wx.switchTab({
+  //           url: '/pages/index/index'
+  //         })
+  //       } else {
+  //         wx.showToast({
+  //           title: res.data.message,
+  //           icon: 'none'
+  //         })
+  //         return;
+  //       }
 
 
-      }
-    })
+  //     }
+  //   })
 
    
-  },
+  // },
 
   handleWechatLogin() {
     wx.getUserProfile({
@@ -145,6 +145,7 @@ Page({
                 success: (response) => {
                   wx.hideLoading()
                   if (response.data.code === 200) {
+                    console.log(response.data);
                     // 保存用户信息
                     wx.setStorageSync('userInfo', response.data.data)
                     wx.setStorageSync('isLoggedIn', true)
