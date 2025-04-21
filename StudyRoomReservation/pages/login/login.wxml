@@ -8,8 +8,7 @@
     <view class="auth-desc">获得您的公开信息（昵称、头像等）</view>
     <button 
       class="wechat-login-btn" 
-      open-type="getUserInfo" 
-      bindgetuserinfo="handleWechatLogin"
+      bindtap="handleWechatLogin"
       type="primary"
     >
       <image class="wechat-icon" src="/static/images/wechat.png" mode="aspectFit"></image>

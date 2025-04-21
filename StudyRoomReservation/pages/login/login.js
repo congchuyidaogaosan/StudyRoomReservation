@@ -126,61 +126,66 @@ Page({
    
   },
 
-  handleWechatLogin(e) {
-    if (e.detail.userInfo) {
-      // 用户同意授权
-      const userInfo = e.detail.userInfo
-      
-      wx.login({
-        success: (res) => {
-          if (res.code) {
-            // 发送 code 到后台换取 token
-            wx.request({
-              url: 'YOUR_API_BASE_URL/api/login/wechat',
-              method: 'POST',
-              data: {
-                code: res.code,
-                userInfo: userInfo
-              },
-              success: (response) => {
-                if (response.data.token) {
-                  // 保存token
-                  wx.setStorageSync('token', response.data.token)
-                  // 保存用户信息
-                  wx.setStorageSync('userInfo', userInfo)
-                  
-                  // 跳转到首页
-                  wx.switchTab({
-                    url: '/pages/index/index'
-                  })
-                } else {
+  handleWechatLogin() {
+    wx.getUserProfile({
+      desc: '用于完善用户资料',
+      success: (res) => {
+        const userInfo = res.userInfo
+        wx.login({
+          success: (loginRes) => {
+            if (loginRes.code) {
+              wx.showLoading({
+                title: '登录中...'
+              })
+              // 发送 code 到后台换取 token
+              wx.request({
+                url: 'http://localhost:8083/Login/wechatLogin',
+                method: 'POST',
+                data: {
+                  code: loginRes.code,
+                  userInfo: userInfo
+                },
+                success: (response) => {
+                  wx.hideLoading()
+                  if (response.data.code === 200) {
+                    // 保存用户信息
+                    wx.setStorageSync('userInfo', response.data.data)
+                    wx.setStorageSync('isLoggedIn', true)
+                    
+                    // 跳转到首页
+                    wx.switchTab({
+                      url: '/pages/index/index'
+                    })
+                  } else {
+                    wx.showToast({
+                      title: response.data.message || '登录失败',
+                      icon: 'none'
+                    })
+                  }
+                },
+                fail: () => {
+                  wx.hideLoading()
                   wx.showToast({
-                    title: '登录失败',
+                    title: '网络错误，请重试',
                     icon: 'none'
                   })
                 }
-              },
-              fail: () => {
-                wx.showToast({
-                  title: '网络错误，请重试',
-                  icon: 'none'
-                })
-              }
-            })
-          } else {
-            wx.showToast({
-              title: '登录失败',
-              icon: 'none'
-            })
+              })
+            } else {
+              wx.showToast({
+                title: '登录失败',
+                icon: 'none'
+              })
+            }
           }
-        }
-      })
-    } else {
-      // 用户拒绝授权
-      wx.showToast({
-        title: '需要授权才能使用',
-        icon: 'none'
-      })
-    }
+        })
+      },
+      fail: (err) => {
+        wx.showToast({
+          title: '需要授权才能使用',
+          icon: 'none'
+        })
+      }
+    })
   }
 }) 
