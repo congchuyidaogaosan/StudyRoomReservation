@@ -5,7 +5,8 @@ Page({
     isSubmitting: false,
     captcha: '',
     captchaUrl: '',
-    captchaKey: ''
+    captchaKey: '',
+    userInfo: null
   },
 
   onLoad() {
@@ -94,7 +95,7 @@ Page({
     let data = { password: this.data.password, username: this.data.studentId };
     console.log(data)
     wx.request({
-      url: 'http://localhost:8081/Login/login',
+      url: 'http://localhost:8083/Login/login',
       data: data,
       method: 'POST',
       header: {
@@ -123,5 +124,63 @@ Page({
     })
 
    
+  },
+
+  handleWechatLogin(e) {
+    if (e.detail.userInfo) {
+      // 用户同意授权
+      const userInfo = e.detail.userInfo
+      
+      wx.login({
+        success: (res) => {
+          if (res.code) {
+            // 发送 code 到后台换取 token
+            wx.request({
+              url: 'YOUR_API_BASE_URL/api/login/wechat',
+              method: 'POST',
+              data: {
+                code: res.code,
+                userInfo: userInfo
+              },
+              success: (response) => {
+                if (response.data.token) {
+                  // 保存token
+                  wx.setStorageSync('token', response.data.token)
+                  // 保存用户信息
+                  wx.setStorageSync('userInfo', userInfo)
+                  
+                  // 跳转到首页
+                  wx.switchTab({
+                    url: '/pages/index/index'
+                  })
+                } else {
+                  wx.showToast({
+                    title: '登录失败',
+                    icon: 'none'
+                  })
+                }
+              },
+              fail: () => {
+                wx.showToast({
+                  title: '网络错误，请重试',
+                  icon: 'none'
+                })
+              }
+            })
+          } else {
+            wx.showToast({
+              title: '登录失败',
+              icon: 'none'
+            })
+          }
+        }
+      })
+    } else {
+      // 用户拒绝授权
+      wx.showToast({
+        title: '需要授权才能使用',
+        icon: 'none'
+      })
+    }
   }
 }) 

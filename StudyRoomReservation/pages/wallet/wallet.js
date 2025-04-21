@@ -72,7 +72,7 @@ Page({
   // 获取交易记录
   getTransactions() {
     wx.request({
-      url: 'http://localhost:8081/wallet/logs',
+      url: 'http://localhost:8083/wallet/logs',
       method: 'GET',
       data: {
         userId: this.data.userInfo.id

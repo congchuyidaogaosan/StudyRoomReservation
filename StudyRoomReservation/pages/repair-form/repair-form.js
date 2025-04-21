@@ -34,7 +34,7 @@ Page({
     }
 
     wx.request({
-      url: 'http://localhost:8081/Warranty/save',
+      url: 'http://localhost:8083/Warranty/save',
       method: 'POST',
       data: {
         roomId: this.data.roomId,

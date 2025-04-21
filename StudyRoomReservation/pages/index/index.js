@@ -55,7 +55,7 @@ Page({
   initRoom() {
     let that = this;
     wx.request({
-      url: 'http://localhost:8081/StudyRooms/list',
+      url: 'http://localhost:8083/StudyRooms/list',
       method: 'POST',
       success(res) {
         console.log(res.data.data)
@@ -70,7 +70,7 @@ Page({
   initTime() {
     let that = this;
     wx.request({
-      url: 'http://localhost:8081/TimeType/list',
+      url: 'http://localhost:8083/TimeType/list',
       method: 'POST',
       success(res) {
         console.log(res.data.data)
@@ -156,7 +156,7 @@ Page({
     // }
 
     wx.request({
-      url: 'http://localhost:8081/Seats/RellayList?roomId=' + room.id + '&timeId=' + slots.id+'&date='+this.data.currentDate,
+      url: 'http://localhost:8083/Seats/RellayList?roomId=' + room.id + '&timeId=' + slots.id+'&date='+this.data.currentDate,
       method: 'POST',
       success(res) {
         console.log(res.data.data)
@@ -279,7 +279,7 @@ Page({
     }
 
     wx.request({
-      url: 'http://localhost:8081/NewBill/save',
+      url: 'http://localhost:8083/NewBill/save',
       method: 'POST',
       data: data,
       header: {

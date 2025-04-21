@@ -36,7 +36,7 @@ Page({
     }
 
     wx.request({
-      url: 'http://localhost:8081/LogBill/update',
+      url: 'http://localhost:8083/LogBill/update',
       data: date,
       method: 'POST',
       header: {
@@ -59,7 +59,7 @@ Page({
       status: '手动退订',
     }
     wx.request({
-      url: 'http://localhost:8081/LogBill/update',
+      url: 'http://localhost:8083/LogBill/update',
       data: mydate,
       method: 'POST',
       header: {
@@ -99,7 +99,7 @@ Page({
     let data = { kehuid: this.data.userInfo.id, status: this.data.status };
 
     wx.request({
-      url: 'http://localhost:8081/LogBill/list',
+      url: 'http://localhost:8083/LogBill/list',
       data: data,
       method: 'POST',
       header: {

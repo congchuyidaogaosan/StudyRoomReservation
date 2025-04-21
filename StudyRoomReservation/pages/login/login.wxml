@@ -1,43 +1,19 @@
 <view class="login-container">
   <view class="login-box">
-    <view class="title">登录</view>
-    <view class="input-group">
-      <view class="input-label">学号</view>
-      <input 
-        type="text" 
-        placeholder="请输入学号" 
-        bindinput="handleStudentIdInput"
-        class="input-item"
-      />
+    <view class="title">自习室预约系统</view>
+    <view class="logo-area">
+      <image class="logo" src="/static/images/logo.png" mode="aspectFit"></image>
     </view>
-    <view class="input-group">
-      <view class="input-label">密码</view>
-      <input 
-        type="password" 
-        placeholder="请输入密码" 
-        bindinput="handlePasswordInput"
-        class="input-item"
-      />
-    </view>
-    <view class="input-group verification">
-      <view class="input-label">验证码</view>
-      <view class="verification-box">
-        <input 
-          type="text" 
-          placeholder="请输入验证码" 
-          bindinput="handleCaptchaInput"
-          class="input-item captcha-input"
-        />
-        <view class="captcha-img" bindtap="refreshCaptcha">
-          <image wx:if="{{captchaUrl}}" src="{{captchaUrl}}" mode="aspectFit"></image>
-          <text wx:else>加载中...</text>
-        </view>
-      </view>
-    </view>
+    <view class="login-desc">申请获取以下权限</view>
+    <view class="auth-desc">获得您的公开信息（昵称、头像等）</view>
     <button 
-      class="login-btn" 
-      bindtap="handleLogin"
+      class="wechat-login-btn" 
+      open-type="getUserInfo" 
+      bindgetuserinfo="handleWechatLogin"
       type="primary"
-    >登录</button>
+    >
+      <image class="wechat-icon" src="/static/images/wechat.png" mode="aspectFit"></image>
+      微信一键登录
+    </button>
   </view>
 </view> 

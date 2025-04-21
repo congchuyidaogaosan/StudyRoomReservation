@@ -44,7 +44,7 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>个人信息</el-dropdown-item>
-              <el-dropdown-item>退出登录</el-dropdown-item>
+              <el-dropdown-item @click.native="handleLogout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -60,6 +60,14 @@
 <script>
 export default {
   name: 'AppLayout',
+  methods: {
+    handleLogout() {
+      // 清除本地存储的token
+      localStorage.removeItem('token')
+      // 跳转到登录页
+      this.$router.push('/login')
+    }
+  },
   computed: {
     activeMenu() {
       const { path } = this.$route
