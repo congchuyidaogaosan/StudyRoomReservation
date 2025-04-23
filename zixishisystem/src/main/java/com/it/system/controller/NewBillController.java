@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -25,6 +27,8 @@ public class NewBillController {
     @Autowired
     private SeatsService seatsService;
 
+    @Autowired
+    private WalletService walletService;
 
     @Autowired
     private KehuService kehuService;
@@ -148,6 +152,16 @@ public class NewBillController {
                 // 记录日志
                 logbillService.newSave(newbill.getKehuId(), newbill.getRoomId(),
                         newbill.getTimeId(), newbill.getSeatsId(), seats.getPrice(), newbill.getTime());
+
+                Wallet wallet = new Wallet();
+                wallet.setNode("-");
+                wallet.setPrice(new BigDecimal(seats.getPrice()));
+                wallet.setUid(newbill.getKehuId());
+                wallet.setThistime(new Date());
+                wallet.setState("消费");
+
+                walletService.save(wallet);
+
                 return Result.ok();
             } else {
                 return Result.fail("预约失败，请重试");
