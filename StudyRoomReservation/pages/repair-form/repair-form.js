@@ -1,5 +1,6 @@
 Page({
   data: {
+    orderId: '',
     roomId: '',
     seatId: '',
     roomName: '',
@@ -10,6 +11,7 @@ Page({
 
   onLoad(options) {
     this.setData({
+      orderId: options.orderId,
       roomId: options.roomId,
       seatId: options.seatId,
       roomName: options.roomName,
@@ -37,6 +39,7 @@ Page({
       url: 'http://localhost:8083/Warranty/save',
       method: 'POST',
       data: {
+        orderId: this.data.orderId,
         roomId: this.data.roomId,
         seatId: this.data.seatId,
         description: this.data.description,

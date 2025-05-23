@@ -128,7 +128,7 @@ Page({
       success: (res) => {
         if (res.confirm) {
           wx.navigateTo({
-            url: `/pages/repair-form/repair-form?roomId=${item.roomId}&seatId=${item.seatsId}&roomName=${item.nick}&seatRow=${item.seatsrow}&seatColumn=${item.seatcolunm}`
+            url: `/pages/repair-form/repair-form?orderId=${item.id}&roomId=${item.roomId}&seatId=${item.seatsId}&roomName=${item.nick}&seatRow=${item.seatsrow}&seatColumn=${item.seatcolunm}`
           })
         }
       }
